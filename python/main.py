@@ -22,6 +22,9 @@ def arg_parser():
         help='The Excel file you wish to strip blank rows from.')
     parser.add_argument('-o', '--output', metavar='FILE',
         help='The path you wish to write the output Excel file to.')
+    parser.add_argument('-s', '--skip', metavar='NUMBER',
+        type=int,
+        help='The number of rows at the beginning you wish to skip blank testing. This is useful if a sheet contains a few blank rows near the top (e.g. for formatting purposes) that you want to preserve.')
     return parser
 
 
@@ -35,7 +38,8 @@ def main(args):
         i = 0
         for a_row in iwb[sn].iter_rows():
             # Test for empty row before empty cell to prevent Exception
-            if not bool(a_row) or a_row[0].value is None:
+            if (i > args.skip
+            and (not bool(a_row) or a_row[0].value is None)):
                 print(f'Sheet {sn} done at row {i}.')
                 break
             else:
