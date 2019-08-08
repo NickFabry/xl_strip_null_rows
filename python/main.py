@@ -34,7 +34,8 @@ def main(args):
         ows = owb.create_sheet(title=sn)
         i = 0
         for a_row in iwb[sn].iter_rows():
-            if a_row[0].value is None:
+            # Test for empty row before empty cell to prevent Exception
+            if not bool(a_row) or a_row[0].value is None:
                 print(f'Sheet {sn} done at row {i}.')
                 break
             else:
